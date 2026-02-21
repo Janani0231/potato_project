@@ -6,6 +6,15 @@ import io
 
 app = FastAPI()
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # ✅ FIXED: Class names must match the exact alphabetical order TensorFlow used during training.
 # Confirmed from notebook output: ['Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy']
 CLASS_NAMES = [
