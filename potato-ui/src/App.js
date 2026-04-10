@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
+
 const CLASS_LABELS = {
   "Potato___Early_blight": "Early Blight",
   "Potato___Late_blight": "Late Blight",
@@ -38,14 +40,19 @@ export default function App() {
     formData.append("file", image);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/predict", {
+      const response = await fetch(`${API_URL}/predict`, {
         method: "POST",
         body: formData,
       });
+
+      if (!response.ok) {
+        throw new Error(`Server responded with status ${response.status}`);
+      }
+
       const data = await response.json();
       setResult(data);
     } catch (err) {
-      setError("Could not connect to the prediction server. Make sure FastAPI is running.");
+      setError("Could not connect to the prediction server. Check REACT_APP_API_URL and confirm FastAPI is running.");
     } finally {
       setLoading(false);
     }
